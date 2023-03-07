@@ -3,9 +3,29 @@ import { Text, View , TextInput, TouchableOpacity, StyleSheet} from 'react-nativ
 
 
 export default function SignUp() {
+
     const [address, setAddress] = useState('');
     const [name,setName]=useState("");
     const [lastName,setLastName]=useState("")
+    const [email, setEmail]=useState("")
+    const [password, setPassword]=useState("")
+    const [checkValidEmail, setCheckValidEmail]= useState(false)
+
+    const handlecheckEmail=(text)=>{
+        let regex =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        setEmail(text);
+        if (regex.test(text)) {
+        setCheckValidEmail(true);
+        } else {
+        setCheckValidEmail(false);
+        }
+    }
+
+    const validatePassword = () => {
+        const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
+        return passwordRegex.test(password);
+      };
+
 
     const handleFirstName=(text)=>{
         setName(text)
@@ -13,6 +33,9 @@ export default function SignUp() {
     const handleLastName=(text)=>{
         setLastName(text)
     }
+    const handlePasswordInput = (text) => {
+        setPassword(text);
+      };
 
     const  handleAddress =(text)=>{
         setAddress(text);
@@ -22,15 +45,13 @@ export default function SignUp() {
         if(name==""){
             alert("fill the name")
         }
-        if(lastName==""){
+        else if(lastName==""){
             alert("fill the family name")
         }
-        if (address==""){
-            console.log("dasdawd")
+        if( checkValidEmail && checkValidPassword ){
+
         }
-        else{
-            alert(address);
-        }        
+               
     }
 
 
@@ -42,10 +63,18 @@ export default function SignUp() {
         </View>
         <View style={Styles.SecondContainer}>
             <View style={Styles.Email_Input}>
-                <TextInput style={Styles.field} placeholder="Email"/>
+                <TextInput style={Styles.field} placeholder="Email" onChangeText={(text)=>handlecheckEmail(text)}/>
+                {!checkValidEmail ? (
+                    <Text style={{ color: 'red',fontSize:15 ,margin:15,flex:1}}>
+                        write your email in correct way
+                    </Text>) : null}
             </View>
             <View style={Styles.Email_Input}>
-                <TextInput style={Styles.field} placeholder="Confirm your email"/>
+                <TextInput style={Styles.field} placeholder="Password" onChangeText={(text)=>handlePasswordInput(text)}/>
+                {!validatePassword() ? (
+                    <Text style={{ color: 'red',fontSize:15 ,margin:15,flex:1}}>
+                        Password must contain at least 8 characters including numbers and letters
+                    </Text>) : null}
             </View>
         </View>
         <View style={Styles.ThirdContainer}>
@@ -64,13 +93,13 @@ export default function SignUp() {
 
 const Styles = StyleSheet.create({
     firstContainer:{
-        flex:0.3,
+        flex:0.2,
         flexDirection:'row',
         marginTop:10,
         alignItems:'center'
     },
     SecondContainer:{
-        flex:0.3,
+        flex:0.45,
     },
     ThirdContainer:{
         flex:0.35
@@ -99,7 +128,7 @@ const Styles = StyleSheet.create({
 
       },
       AddressContainer:{
-        flex:0.8
+        flex:0.6
       },
       SubmitContainer:{
         flex:0.2,
