@@ -4,12 +4,14 @@ import { Text, View , TextInput, TouchableOpacity, StyleSheet} from 'react-nativ
 
 export default function SignUp() {
 
-    const [address, setAddress] = useState('');
+    
     const [name,setName]=useState("");
     const [lastName,setLastName]=useState("")
     const [email, setEmail]=useState("")
     const [password, setPassword]=useState("")
     const [checkValidEmail, setCheckValidEmail]= useState(false)
+    const [address, setAddress] = useState('');
+    const [addressFlag,setAddressFlag] = useState(false)
 
     const handlecheckEmail=(text)=>{
         let regex =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -38,9 +40,18 @@ export default function SignUp() {
       };
 
     const  handleAddress =(text)=>{
-        setAddress(text);
+            setAddressFlag(false)
+            setAddress(text);
+            if (text.length>20 && text.length< 150) {
+              setAddress(text);
+              setAddressFlag(true)
+            }
+            
+            
+          };
         
-    }
+        
+    
     const handleSubmit=()=>{
         if(name==""){
             alert("fill the name")
@@ -48,9 +59,15 @@ export default function SignUp() {
         else if(lastName==""){
             alert("fill the family name")
         }
-        if( checkValidEmail && checkValidPassword ){
 
+        else if (!addressFlag){
+            alert("in your address you should enter at least 20 char")
         }
+        else{
+            alert("done")
+        }
+        
+        
                
     }
 
@@ -79,7 +96,7 @@ export default function SignUp() {
         </View>
         <View style={Styles.ThirdContainer}>
             <View style={Styles.AddressContainer}>
-                <TextInput style={Styles.Addressfield} placeholder="Address" onChangeText={(text)=>handleAddress(text)} value={address}/>
+                <TextInput style={Styles.Addressfield} placeholder="Address"  onChangeText={(text)=>handleAddress(text)} value={address}/>
             </View>
             <View style={Styles.SubmitContainer}>
                 <TouchableOpacity style={Styles.Submit_btn} onPress={()=>handleSubmit()}>
