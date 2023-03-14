@@ -1,79 +1,26 @@
-import React, { useState } from 'react';
-import { Text, View , TextInput, TouchableOpacity, StyleSheet} from 'react-native';
-
+import { Text, View , TextInput, TouchableOpacity, StyleSheet,span} from 'react-native';
+import {useHook} from "./customhook"
 
 export default function SignUp() {
 
-    
-    const [name,setName]=useState("");
-    const [lastName,setLastName]=useState("")
-    const [email, setEmail]=useState("")
-    const [password, setPassword]=useState("")
-    const [checkValidEmail, setCheckValidEmail]= useState(false)
-    const [address, setAddress] = useState('');
-    const [addressFlag,setAddressFlag] = useState(false)
-
-    const handlecheckEmail=(text)=>{
-        let regex =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-        setEmail(text);
-        if (regex.test(text)) {
-        setCheckValidEmail(true);
-        } else {
-        setCheckValidEmail(false);
-        }
-    }
-
-    const validatePassword = () => {
-        const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
-        return passwordRegex.test(password);
-      };
-
-
-    const handleFirstName=(text)=>{
-        setName(text)
-    }
-    const handleLastName=(text)=>{
-        setLastName(text)
-    }
-    const handlePasswordInput = (text) => {
-        setPassword(text);
-      };
-
-    const  handleAddress =(text)=>{
-            setAddressFlag(false)
-            setAddress(text);
-            if (text.length>20 && text.length< 150) {
-              setAddress(text);
-              setAddressFlag(true)
-            }
-            
-            
-          };
-        
-        
-    
-    const handleSubmit=()=>{
-        if(name==""){
-            alert("fill the name")
-        }
-        else if(lastName==""){
-            alert("fill the family name")
-        }
-
-        else if (!addressFlag){
-            alert("in your address you should enter at least 20 char")
-        }
-        else{
-            alert("done")
-        }
-        
-        
-               
-    }
-
-
+    const { 
+        handleSubmit,
+        handleAddress,
+        address,
+        //validatePassword,
+        handlePasswordInput,
+        handlecheckEmail,
+        checkValidEmail,
+        handleLastName,
+        handleFirstName,
+        lastName,
+        name,
+        emailNotValid,
+        passwordNotValid ,error} = useHook();
+   
   return (
     <View style={{flex:1,backgroundColor:"lightblue"}}>
+        <Text style={{color:"red"}}>{error}</Text>
         <View style={Styles.firstContainer}>
             <View style={Styles.inputContainer}><TextInput style={Styles.field} placeholder="First Name" onChangeText={(text)=>handleFirstName(text)} value={name}/></View>
             <View style={Styles.inputContainer}><TextInput style={Styles.field} placeholder="Last Name" onChangeText={(text)=>handleLastName(text) } value={lastName}/></View>
@@ -81,18 +28,13 @@ export default function SignUp() {
         <View style={Styles.SecondContainer}>
             <View style={Styles.Email_Input}>
                 <TextInput style={Styles.field} placeholder="Email" onChangeText={(text)=>handlecheckEmail(text)}/>
-                {!checkValidEmail ? (
-                    <Text style={{ color: 'red',fontSize:15 ,margin:15,flex:1}}>
-                        write your email in correct way
-                    </Text>) : null}
+                {/* {!checkValidEmail ? emailNotValid() : null} */}
             </View>
             <View style={Styles.Email_Input}>
                 <TextInput style={Styles.field} placeholder="Password" onChangeText={(text)=>handlePasswordInput(text)}/>
-                {!validatePassword() ? (
-                    <Text style={{ color: 'red',fontSize:15 ,margin:15,flex:1}}>
-                        Password must contain at least 8 characters including numbers and letters
-                    </Text>) : null}
+                {/* {!validatePassword() ? passwordNotValid() : null} */}
             </View>
+
         </View>
         <View style={Styles.ThirdContainer}>
             <View style={Styles.AddressContainer}>
